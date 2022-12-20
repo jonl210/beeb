@@ -17,7 +17,7 @@ const MainScreen = () => {
 const TestDrawer = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen component={MainScreen} />
+      <Drawer.Screen name="Test" component={MainScreen} />
     </Drawer.Navigator>
   );
 };
