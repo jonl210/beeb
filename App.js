@@ -4,8 +4,8 @@ import { StatusBar } from "expo-status-bar";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { View, Text, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Logo from "./src/Logo";
-import { Entypo } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
+import { Feather } from "@expo/vector-icons";
 
 /*
   Icons to use later in drawer:
@@ -16,78 +16,135 @@ import { Entypo } from "@expo/vector-icons";
 */
 
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
+const Stack1 = createNativeStackNavigator();
+const Stack2 = createNativeStackNavigator();
 
-const TestStack = ({ navigation }) => {
+const Logo = () => {
+  const [loaded] = useFonts({
+    PatuaOne: require("./assets/fonts/PatuaOne-Regular.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  } else {
+    return (
+      <Text
+        style={{
+          fontFamily: "PatuaOne",
+          fontSize: 38,
+          marginTop: -6,
+          color: "#333",
+        }}
+      >
+        beeb
+      </Text>
+    );
+  }
+};
+
+const MainDrawer = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="test"
-        component={MainScreen}
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: false,
+        drawerLabelStyle: { fontSize: 20, color: "#333" },
+        drawerActiveTintColor: "#cd2653",
+      }}
+    >
+      <Drawer.Screen
+        name="FeedStack"
+        component={FeedStack}
+        options={{ title: "Feed" }}
+      />
+      <Drawer.Screen
+        name="GroupsStack"
+        component={GroupsStack}
+        options={{ title: "Groups" }}
+      />
+    </Drawer.Navigator>
+  );
+};
+
+const FeedStack = ({ navigation }) => {
+  return (
+    <Stack1.Navigator>
+      <Stack1.Screen
+        name="FeedScreen"
+        component={FeedScreen}
         options={{
           headerTitle: () => <Logo />,
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Entypo name="menu" size={32} color="black" />
+              <Feather name="menu" size={30} color="#333" />
             </TouchableOpacity>
           ),
         }}
       />
-    </Stack.Navigator>
+    </Stack1.Navigator>
   );
 };
 
-const MainScreen = () => {
+const GroupsStack = ({ navigation }) => {
+  return (
+    <Stack2.Navigator
+      screenOptions={{ headerTitleStyle: { fontSize: 20, color: "#333" } }}
+    >
+      <Stack2.Screen
+        name="GroupsScreen"
+        component={GroupsScreen}
+        options={{
+          headerTitle: "Groups",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Feather name="menu" size={30} color="#333" />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("NewGroupScreen")}
+            >
+              <Feather name="plus" size={30} color="#333" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack2.Group screenOptions={{ presentation: "modal" }}>
+        <Stack2.Screen
+          name="NewGroupScreen"
+          component={NewGroupScreen}
+          options={{
+            headerTitle: "New Group",
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("GroupsScreen")}
+              >
+                <Feather name="x" size={30} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+      </Stack2.Group>
+    </Stack2.Navigator>
+  );
+};
+
+const FeedScreen = () => {
   return <View></View>;
 };
 
 const GroupsScreen = () => {
-  return (
-    <View>
-      <Text>Groups</Text>
-    </View>
-  );
+  return <View></View>;
 };
 
-const ProfileScreen = () => {
-  return (
-    <View>
-      <Text>Profile</Text>
-    </View>
-  );
-};
-
-const InvitesScreen = () => {
-  return (
-    <View>
-      <Text>Invites</Text>
-    </View>
-  );
-};
-
-const TestDrawer = () => {
-  return (
-    <Drawer.Navigator
-      screenOptions={{
-        drawerType: "front",
-        drawerLabelStyle: { fontSize: 20, color: "#333" },
-        drawerActiveTintColor: "#cd2653",
-        headerShown: false,
-      }}
-    >
-      <Drawer.Screen name="Home" component={TestStack} />
-      <Drawer.Screen name="Groups" component={GroupsScreen} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen name="Invites" component={InvitesScreen} />
-    </Drawer.Navigator>
-  );
+const NewGroupScreen = () => {
+  return <View></View>;
 };
 
 export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="inverted" />
-      <TestDrawer />
+      <MainDrawer />
     </NavigationContainer>
   );
 }
