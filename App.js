@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -118,7 +118,7 @@ const GroupsStack = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("GroupsScreen")}
               >
-                <Feather name="x" size={30} color="black" />
+                <Feather name="x" size={30} color="#333" />
               </TouchableOpacity>
             ),
           }}
@@ -129,15 +129,19 @@ const GroupsStack = ({ navigation }) => {
 };
 
 const FeedScreen = () => {
-  return <View></View>;
+  return <View style={{ flex: 1, backgroundColor: "#fff" }}></View>;
 };
 
 const GroupsScreen = () => {
-  return <View></View>;
+  return <View style={{ flex: 1, backgroundColor: "#fff" }}></View>;
 };
 
 const NewGroupScreen = () => {
-  return <View></View>;
+  return (
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <TextInput style={{ height: 40, borderColor: "red", borderWidth: 1 }} />
+    </View>
+  );
 };
 
 export default function App() {
