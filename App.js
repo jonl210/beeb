@@ -2,7 +2,14 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+  Keyboard,
+} from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -18,6 +25,7 @@ import { Feather } from "@expo/vector-icons";
 const Drawer = createDrawerNavigator();
 const Stack1 = createNativeStackNavigator();
 const Stack2 = createNativeStackNavigator();
+const NewGroupStackNav = createNativeStackNavigator();
 
 const Logo = () => {
   const [loaded] = useFonts({
@@ -108,23 +116,41 @@ const GroupsStack = ({ navigation }) => {
           ),
         }}
       />
-      <Stack2.Group screenOptions={{ presentation: "modal" }}>
+      <Stack2.Group screenOptions={{ presentation: "fullScreenModal" }}>
         <Stack2.Screen
           name="NewGroupScreen"
-          component={NewGroupScreen}
+          component={NewGroupStack}
           options={{
+            headerShown: false,
             headerTitle: "New Group",
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("GroupsScreen")}
-              >
-                <Feather name="x" size={30} color="#333" />
-              </TouchableOpacity>
-            ),
           }}
         />
       </Stack2.Group>
     </Stack2.Navigator>
+  );
+};
+
+const NewGroupStack = ({ navigation }) => {
+  return (
+    <NewGroupStackNav.Navigator>
+      <NewGroupStackNav.Screen
+        name="NewGroupName"
+        component={NewGroupNameScreen}
+        options={{
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("GroupsScreen")}
+            >
+              <Feather name="x" size={30} color="#333" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <NewGroupStackNav.Screen
+        name="NewGroupCreate"
+        component={NewGroupCreateScreen}
+      />
+    </NewGroupStackNav.Navigator>
   );
 };
 
@@ -136,12 +162,41 @@ const GroupsScreen = () => {
   return <View style={{ flex: 1, backgroundColor: "#fff" }}></View>;
 };
 
-const NewGroupScreen = () => {
+const NewGroupNameScreen = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <TextInput style={{ height: 40, borderColor: "red", borderWidth: 1 }} />
-    </View>
+    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View style={{ flex: 1 }}>
+        <View style={{ marginHorizontal: 15, marginTop: 20 }}>
+          <Text style={{ fontSize: 18, marginBottom: 5 }}>Name</Text>
+          <TextInput
+            autoFocus
+            placeholder={'"Study group"'}
+            placeholderTextColor={"#c3c3c3"}
+            selectionColor={"#cd2653"}
+            style={{
+              height: 45,
+              borderColor: "#c3c3c3",
+              borderWidth: 1,
+              borderRadius: 6,
+              paddingLeft: 10,
+              fontSize: 16,
+            }}
+          />
+          <TouchableOpacity
+            onPress={() => (
+              navigation.navigate("NewGroupCreate"), Keyboard.dismiss()
+            )}
+          >
+            <Text>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
+};
+
+const NewGroupCreateScreen = () => {
+  return <View></View>;
 };
 
 export default function App() {
