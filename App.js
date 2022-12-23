@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
-  Button,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
@@ -57,7 +56,7 @@ const MainDrawer = () => {
       screenOptions={{
         headerShown: false,
         drawerLabelStyle: { fontSize: 20, color: "#333" },
-        drawerActiveTintColor: "#cd2653",
+        drawerActiveTintColor: "#ff878a",
       }}
     >
       <Drawer.Screen
@@ -84,7 +83,7 @@ const FeedStack = ({ navigation }) => {
           headerTitle: () => <Logo />,
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Feather name="menu" size={30} color="#333" />
+              <Feather name="menu" size={28} color="#333" />
             </TouchableOpacity>
           ),
         }}
@@ -105,14 +104,14 @@ const GroupsStack = ({ navigation }) => {
           headerTitle: "Groups",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Feather name="menu" size={30} color="#333" />
+              <Feather name="menu" size={28} color="#333" />
             </TouchableOpacity>
           ),
           headerRight: () => (
             <TouchableOpacity
               onPress={() => navigation.navigate("NewGroupScreen")}
             >
-              <Feather name="plus" size={30} color="#333" />
+              <Feather name="plus" size={28} color="#333" />
             </TouchableOpacity>
           ),
         }}
@@ -140,12 +139,12 @@ const NewGroupStack = ({ navigation }) => {
         name="NewGroupName"
         component={NewGroupNameScreen}
         options={{
-          headerTitle: "New Group",
+          headerTitle: "New group",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.navigate("GroupsScreen")}
             >
-              <Feather name="x" size={30} color="#333" />
+              <Feather name="x" size={28} color="#333" />
             </TouchableOpacity>
           ),
         }}
@@ -153,6 +152,17 @@ const NewGroupStack = ({ navigation }) => {
       <NewGroupStackNav.Screen
         name="NewGroupCreate"
         component={NewGroupCreateScreen}
+        options={{
+          headerTitle: "New group",
+          headerBackTitleVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("NewGroupName")}
+            >
+              <Feather name="arrow-left" size={28} color="#333" />
+            </TouchableOpacity>
+          ),
+        }}
       />
     </NewGroupStackNav.Navigator>
   );
@@ -172,14 +182,22 @@ const NewGroupNameScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button
-          title="Next"
+        <TouchableOpacity
           disabled={name !== "" ? false : true}
-          color="#cd2653"
           onPress={() => (
             navigation.navigate("NewGroupCreate"), Keyboard.dismiss()
           )}
-        />
+        >
+          {name !== "" ? (
+            <Text style={{ fontSize: 18, color: "#ff878a", fontWeight: "600" }}>
+              Next
+            </Text>
+          ) : (
+            <Text style={{ fontSize: 18, color: "#c3c3c3", fontWeight: "600" }}>
+              Next
+            </Text>
+          )}
+        </TouchableOpacity>
       ),
     });
   }, [name]);
@@ -201,7 +219,7 @@ const NewGroupNameScreen = ({ navigation }) => {
           autoFocus
           placeholder={'"Study group"'}
           placeholderTextColor={"#c3c3c3"}
-          selectionColor="#cd2653"
+          selectionColor="#ff878a"
           style={{
             height: 48,
             borderColor: "#c3c3c3",
@@ -216,14 +234,26 @@ const NewGroupNameScreen = ({ navigation }) => {
   );
 };
 
-const NewGroupCreateScreen = () => {
-  return <View></View>;
+const NewGroupCreateScreen = ({ navigation }) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity>
+          <Text style={{ fontSize: 18, color: "#ff878a", fontWeight: "600" }}>
+            Create
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  });
+
+  return <View style={{ flex: 1, backgroundColor: "#fff" }}></View>;
 };
 
 export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar style="inverted" />
+      <StatusBar style="dark" />
       <MainDrawer />
     </NavigationContainer>
   );
