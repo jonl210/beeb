@@ -7,19 +7,20 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView,
   Keyboard,
+  Button,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
+import { useState, useEffect } from "react";
 
 /*
   Icons to use later in drawer:
   - Main/Home/Feed: <Octicons name="home" size={28} color="black" />
   - Groups: Figure it out
   - Profile: <FontAwesome5 name="user" size={28} color="black" />
-  - Invites: <Octicons name="mail" size={28} color="black" />  
+  - Invites: <Octicons name="mail" size={28} color="black" />
 */
 
 const Drawer = createDrawerNavigator();
@@ -95,7 +96,7 @@ const FeedStack = ({ navigation }) => {
 const GroupsStack = ({ navigation }) => {
   return (
     <Stack2.Navigator
-      screenOptions={{ headerTitleStyle: { fontSize: 20, color: "#333" } }}
+      screenOptions={{ headerTitleStyle: { fontSize: 18, color: "#333" } }}
     >
       <Stack2.Screen
         name="GroupsScreen"
@@ -132,11 +133,14 @@ const GroupsStack = ({ navigation }) => {
 
 const NewGroupStack = ({ navigation }) => {
   return (
-    <NewGroupStackNav.Navigator>
+    <NewGroupStackNav.Navigator
+      screenOptions={{ headerTitleStyle: { fontSize: 18, color: "#333" } }}
+    >
       <NewGroupStackNav.Screen
         name="NewGroupName"
         component={NewGroupNameScreen}
         options={{
+          headerTitle: "New Group",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.navigate("GroupsScreen")}
@@ -163,35 +167,52 @@ const GroupsScreen = () => {
 };
 
 const NewGroupNameScreen = ({ navigation }) => {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          title="Next"
+          disabled={name !== "" ? false : true}
+          color="#cd2653"
+          onPress={() => (
+            navigation.navigate("NewGroupCreate"), Keyboard.dismiss()
+          )}
+        />
+      ),
+    });
+  }, [name]);
+
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View style={{ flex: 1 }}>
-        <View style={{ marginHorizontal: 15, marginTop: 20 }}>
-          <Text style={{ fontSize: 18, marginBottom: 5 }}>Name</Text>
-          <TextInput
-            autoFocus
-            placeholder={'"Study group"'}
-            placeholderTextColor={"#c3c3c3"}
-            selectionColor={"#cd2653"}
-            style={{
-              height: 45,
-              borderColor: "#c3c3c3",
-              borderWidth: 1,
-              borderRadius: 6,
-              paddingLeft: 10,
-              fontSize: 16,
-            }}
-          />
-          <TouchableOpacity
-            onPress={() => (
-              navigation.navigate("NewGroupCreate"), Keyboard.dismiss()
-            )}
-          >
-            <Text>Next</Text>
-          </TouchableOpacity>
-        </View>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View
+        style={{
+          flex: 1,
+          marginHorizontal: 15,
+          marginTop: 20,
+        }}
+      >
+        <Text style={{ fontSize: 18, marginBottom: 5 }}>Name</Text>
+        <TextInput
+          value={name}
+          onChangeText={(text) => setName(text)}
+          blurOnSubmit={false}
+          autoFocus
+          placeholder={'"Study group"'}
+          placeholderTextColor={"#c3c3c3"}
+          selectionColor="#cd2653"
+          style={{
+            height: 48,
+            borderColor: "#c3c3c3",
+            borderWidth: 1,
+            borderRadius: 6,
+            paddingLeft: 10,
+            fontSize: 17,
+          }}
+        />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
