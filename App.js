@@ -2,13 +2,7 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -149,21 +143,6 @@ const NewGroupStack = ({ navigation }) => {
           ),
         }}
       />
-      <NewGroupStackNav.Screen
-        name="NewGroupCreate"
-        component={NewGroupCreateScreen}
-        options={{
-          headerTitle: "New group",
-          headerBackTitleVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("NewGroupName")}
-            >
-              <Feather name="arrow-left" size={28} color="#333" />
-            </TouchableOpacity>
-          ),
-        }}
-      />
     </NewGroupStackNav.Navigator>
   );
 };
@@ -182,19 +161,14 @@ const NewGroupNameScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
-          disabled={name !== "" ? false : true}
-          onPress={() => (
-            navigation.navigate("NewGroupCreate"), Keyboard.dismiss()
-          )}
-        >
+        <TouchableOpacity disabled={name !== "" ? false : true}>
           {name !== "" ? (
-            <Text style={{ fontSize: 18, color: "#ff878a", fontWeight: "600" }}>
-              Next
+            <Text style={{ fontSize: 17, color: "#ff878a", fontWeight: "600" }}>
+              Create
             </Text>
           ) : (
-            <Text style={{ fontSize: 18, color: "#c3c3c3", fontWeight: "600" }}>
-              Next
+            <Text style={{ fontSize: 17, color: "#c3c3c3", fontWeight: "600" }}>
+              Create
             </Text>
           )}
         </TouchableOpacity>
@@ -220,6 +194,7 @@ const NewGroupNameScreen = ({ navigation }) => {
           placeholder={'"Study group"'}
           placeholderTextColor={"#c3c3c3"}
           selectionColor="#ff878a"
+          spellCheck={false}
           style={{
             height: 48,
             borderColor: "#c3c3c3",
@@ -232,22 +207,6 @@ const NewGroupNameScreen = ({ navigation }) => {
       </View>
     </View>
   );
-};
-
-const NewGroupCreateScreen = ({ navigation }) => {
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity>
-          <Text style={{ fontSize: 18, color: "#ff878a", fontWeight: "600" }}>
-            Create
-          </Text>
-        </TouchableOpacity>
-      ),
-    });
-  });
-
-  return <View style={{ flex: 1, backgroundColor: "#fff" }}></View>;
 };
 
 export default function App() {
