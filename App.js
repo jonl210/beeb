@@ -2,7 +2,13 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  FlatList,
+} from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -110,7 +116,7 @@ const GroupsStack = ({ navigation }) => {
           ),
         }}
       />
-      <Stack2.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <Stack2.Group screenOptions={{ presentation: "modal" }}>
         <Stack2.Screen
           name="NewGroupScreen"
           component={NewGroupStack}
@@ -152,7 +158,22 @@ const FeedScreen = () => {
 };
 
 const GroupsScreen = () => {
-  return <View style={{ flex: 1, backgroundColor: "#fff" }}></View>;
+  const [groups, setGroups] = useState([
+    { name: "StanfordSummer", members: 1, posts: 1, id: 1 },
+    { name: "TheBoys", members: 3, posts: 8, id: 2 },
+  ]);
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <FlatList
+        data={groups}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return <Text>{item.name}</Text>;
+        }}
+      />
+    </View>
+  );
 };
 
 const NewGroupNameScreen = ({ navigation }) => {
@@ -161,8 +182,10 @@ const NewGroupNameScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity disabled={name !== "" ? false : true}>
-          {name !== "" ? (
+        <TouchableOpacity
+          disabled={name !== "" && name.trim().length !== 0 ? false : true}
+        >
+          {name.trim().length !== 0 ? (
             <Text style={{ fontSize: 17, color: "#ff878a", fontWeight: "600" }}>
               Create
             </Text>
