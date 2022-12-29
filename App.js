@@ -179,12 +179,21 @@ const GroupsScreen = () => {
 const NewGroupNameScreen = ({ navigation }) => {
   const [name, setName] = useState("");
 
+  const setRandomPlaceholder = () => {
+    const placeholders = [
+      '"Study group"',
+      '"Hiking stuff"',
+      '"Paris vacation"',
+      '"Good restaurants"',
+    ];
+    const index = Math.floor(Math.random() * placeholders.length);
+    return placeholders[index];
+  };
+
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
-          disabled={name !== "" && name.trim().length !== 0 ? false : true}
-        >
+        <TouchableOpacity disabled={name.trim().length !== 0 ? false : true}>
           {name.trim().length !== 0 ? (
             <Text style={{ fontSize: 17, color: "#ff878a", fontWeight: "600" }}>
               Create
@@ -214,7 +223,7 @@ const NewGroupNameScreen = ({ navigation }) => {
           onChangeText={(text) => setName(text)}
           blurOnSubmit={false}
           autoFocus
-          placeholder={'"Study group"'}
+          placeholder={setRandomPlaceholder()}
           placeholderTextColor={"#c3c3c3"}
           selectionColor="#ff878a"
           spellCheck={false}
