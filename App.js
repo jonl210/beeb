@@ -181,10 +181,10 @@ const NewGroupNameScreen = ({ navigation }) => {
 
   const setRandomPlaceholder = () => {
     const placeholders = [
-      '"Study group"',
-      '"Hiking stuff"',
-      '"Paris vacation"',
-      '"Good restaurants"',
+      '"Study Group"',
+      '"Hiking Gear"',
+      '"Paris Vacation"',
+      '"Restaurants to visit"',
     ];
     const index = Math.floor(Math.random() * placeholders.length);
     return placeholders[index];
@@ -196,11 +196,11 @@ const NewGroupNameScreen = ({ navigation }) => {
         <TouchableOpacity disabled={name.trim().length !== 0 ? false : true}>
           {name.trim().length !== 0 ? (
             <Text style={{ fontSize: 17, color: "#ff878a", fontWeight: "600" }}>
-              Create
+              Next
             </Text>
           ) : (
             <Text style={{ fontSize: 17, color: "#c3c3c3", fontWeight: "600" }}>
-              Create
+              Next
             </Text>
           )}
         </TouchableOpacity>
@@ -217,7 +217,7 @@ const NewGroupNameScreen = ({ navigation }) => {
           marginTop: 20,
         }}
       >
-        <Text style={{ fontSize: 18, marginBottom: 5 }}>Name</Text>
+        <Text style={{ fontSize: 18, marginBottom: 5 }}>Group name</Text>
         <TextInput
           value={name}
           onChangeText={(text) => setName(text)}
