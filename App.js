@@ -8,11 +8,13 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  StyleSheet,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
+import { Dropdown } from "react-native-element-dropdown";
 
 /*
   Icons to use later in drawer:
@@ -149,6 +151,21 @@ const NewGroupStack = ({ navigation }) => {
           ),
         }}
       />
+      <NewGroupStackNav.Screen
+        name="NewGroupInvite"
+        component={NewGroupInviteScreen}
+        options={{
+          headerTitle: "Invite people",
+          headerBackTitleVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("NewGroupName")}
+            >
+              <Feather name="arrow-left" size={28} color="black" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
     </NewGroupStackNav.Navigator>
   );
 };
@@ -193,7 +210,10 @@ const NewGroupNameScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity disabled={name.trim().length !== 0 ? false : true}>
+        <TouchableOpacity
+          disabled={name.trim().length !== 0 ? false : true}
+          onPress={() => navigation.navigate("NewGroupInvite")}
+        >
           {name.trim().length !== 0 ? (
             <Text style={{ fontSize: 17, color: "#ff878a", fontWeight: "600" }}>
               Next
@@ -240,6 +260,98 @@ const NewGroupNameScreen = ({ navigation }) => {
     </View>
   );
 };
+
+const NewGroupInviteScreen = () => {
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [groups, setGroups] = useState([
+    { name: "StanfordSummer", members: 1, posts: 1, id: 1 },
+    { name: "TheBoys", members: 3, posts: 8, id: 2 },
+  ]);
+
+  const data = [
+    { label: "Item 1", value: "1" },
+    { label: "Item 2", value: "2" },
+    { label: "Item 3", value: "3" },
+    { label: "Item 4", value: "4" },
+    { label: "Item 5", value: "5" },
+    { label: "Item 6", value: "6" },
+    { label: "Item 7", value: "7" },
+    { label: "Item 8", value: "8" },
+  ];
+
+  return (
+    <View style={styles.container}>
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={data}
+        search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={"Find friends"}
+        searchPlaceholder="Search..."
+        value={value}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        // onChange={(item) => {
+
+        // }}
+      />
+      <FlatList
+        data={groups}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return <Text>{item.name}</Text>;
+        }}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: "#c3c3c3",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});
 
 export default function App() {
   return (
